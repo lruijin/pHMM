@@ -258,7 +258,6 @@ for(int i = n-2; i >= 0; i--){
   Z[i] = arma::index_max(tmpv + log(gma.col(Z[i+1]-1))) + 1;
 }
 
-//List ret; ret["allprobs"] = allprobs; ret["foo"] = foo; ret["lscale"] = lscale; ret["lalpha"] = lalpha;
 List ret; ret["lalpha"] = lalpha; ret["Z"] = Z;
 return ret;
 }
