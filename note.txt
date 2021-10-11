@@ -1,0 +1,2 @@
+1. dhmm_models.R: each run requires ?g mem
+2. mhmm_models.R: run about 5 hours. 3g mem at maximum 5 hours. 3g mem at maximum 5 hours. 3g mem at maximum 5 hours. 3g mem at maximum 5 hours. 3g mem at maximum 

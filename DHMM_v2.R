@@ -1,8 +1,8 @@
 ## Version 0.002
-## This code is for the dHMM
+## This code is for the DHMM
 ##
 #######
-#	genSim generates simulated dHMM dataset without covariates
+#	genSim generates simulated DHMM dataset
 #	code written for clarity, maybe not efficient
 #	arguments:
 # N: Number of study groups (integer). e.g.: number of families etc.
@@ -15,14 +15,12 @@
 #	reSigma: random effects covariance matrix (\sum K_m x \sum K_m matrix)
 #	P0: hidden states transition probability matrix (hs[1] x hs[1] matrix) for placebo or baseline group
 #	Pi0: initial probability vector (vector, length hs[1]) for placebo or baseline group
-#	Pm0 : hidden states perception matrix for placebo or basline group(list of length M, each element is a hs[1] x hs[m+1] matrix)
+#	Pm : hidden states translation probability matrix (list of length M, each element is a hs[1] x hs[m+1] matrix)
 # w: random effects design matrix -- uses default as in paper (separate but correlated REs), \sum K_m by \sum K_m matrix, diagnomal matrix by default
 #	rx: binary vector of treatment indicators of length N; if not specified assumes all come from baseline group
 #	P1: hidden state tpm for treatment group (same as P0, requires rx to be specified); if left null, assumes no difference
 #	Pi1: hidden state initial probability vector for treatment group (same as Pi0, requires rx to be specified); if left null, assumes no difference
-# Pm1: hidden states perception matrix for treatment group (same as Pm0, requires rx to be specified); if left null, assumes no difference.
-#	fitRx: a logical vector of length two: fitRx[1] fits separate intitial probably treatment probabilities; fitRx[2] fits separate tpms;
-#        fitRx[3] fits separte perception matrices
+#	fitRx: a logical vector of length two: fitRx[1] is whether to fit intitial probably treatment probabilities separately for Rx and Control; fitRx[2] fits separate tpms
 #
 # 	Returns as a list everything you need to start computation:
 #	y: generated responses as a list of length \sum K_m, each element is an N by ni matrix
@@ -31,7 +29,6 @@
 #	Z: generated hidden states (N x ni matrix) -- you don't have these normally
 # Zm : generated hidden states of each member, a list of M and each element is an N x ni matrix
 #	randomEffects: subject specific random effects (N x \sum K_m matrix -- you don't have these normally either)
-# hs: hs[1] is the number of hidden states of the whole group. hs[2:(M+1)] is the vector of numbers of hidden states of all the members.
 #	rx: treatment dummy variables
 #	pars: parameter vector used to simulate data (useful for thinking specifying possible starting values)
 #######
@@ -47,10 +44,8 @@ genSim <- function(N = 400, M = 2, K = c(2,2), ni = 5, hs = c(3,3,3),
                    P1=matrix(c(0.487,0.026,0.020,0.465,0.651,0.022,0.048,0.323,0.958),nr=3),Pi1=c(0.495,0.437,0.068),
                    Pm1=list(matrix(c(0.827,0.133,0.000,0.039,0.487,0.009,0.134,0.380,0.991),3,3),matrix(c(0.887,0.001,0.000,0.028,0.970,0.031,0.085,0.092,0.),3,3)),
                    rx.=rep(0,N),fitRx=c(FALSE,FALSE,FALSE), w=diag(sum(K))){
-  # Cholesky decomposition to generate random effects from N(0, reSigma) from standard normal distribution.
   Res <- matrix(NA,nr=N,nc=dim(reSigma)[1]);
   reSigmachol <- chol(reSigma);
-  # Initialize matrix and list to store group hidden states and members' hidden states.
   Z <- matrix(NA,nr=N,nc=ni);
   Zm <- list()
   length(Zm) = M
@@ -58,20 +53,18 @@ genSim <- function(N = 400, M = 2, K = c(2,2), ni = 5, hs = c(3,3,3),
     Zm[[m]] <- matrix(NA,N,ni)
   }
   
-  # Initialize space for response variables. There are sum(K) number of response variables.
   y <- rep(list(matrix(NA, N, ni)), sum(K))
   for(i in 1:N) {
-    # Generate hidden states for the ith group.
     if(fitRx[1] & !is.null(rx.) & !is.null(Pi1)) {
       if(rx.[i]==1) {
         Z[i,1] <- sample(1:hs[1],1,replace=TRUE,Pi1); #intial hidden states
       } else {
         Z[i,1] <- sample(1:hs[1],1,replace=TRUE,Pi0);
       }
-    } else { 
+    } else {
       Z[i,1] <- sample(1:hs[1],1,replace=TRUE,Pi0); #intial hidden states
     }
-    # Generate the random effect
+    
     Res[i,] <- t(reSigmachol)%*%rnorm(dim(reSigma)[1])
     # Generate hidden states of each member based on the group hidden states
     ctt <- 1
@@ -85,8 +78,6 @@ genSim <- function(N = 400, M = 2, K = c(2,2), ni = 5, hs = c(3,3,3),
       }else{
         Zm[[m]][i,1] <- sample(1:hs[1+m],1,replace=T,Pm0[[m]][Z[i,1],])
       }
-      # Generate the response variables for each member.
-      # Each member has K[m] variables.
       for(k in 1:K[m]){
         tmpneta <- sum(tau[[m]][1:Zm[[m]][i,1],k]) + w[ctt,]%*%Res[i,];
         y[[ctt]][i,1]<- rnorm(1,tmpneta,sqrt(1/residinvvar[[m]][Zm[[m]][i,1],k]));
@@ -258,6 +249,7 @@ for(int i = n-2; i >= 0; i--){
   Z[i] = arma::index_max(tmpv + log(gma.col(Z[i+1]-1))) + 1;
 }
 
+//List ret; ret["allprobs"] = allprobs; ret["foo"] = foo; ret["lscale"] = lscale; ret["lalpha"] = lalpha;
 List ret; ret["lalpha"] = lalpha; ret["Z"] = Z;
 return ret;
 }
