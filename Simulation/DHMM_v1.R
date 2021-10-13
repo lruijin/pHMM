@@ -1,23 +1,24 @@
 ## Version 0.002
-## This code is for the DHMM
+## This code is for the pHMM
 ##
 #######
-#	genSim generates simulated DHMM dataset
+#	genSim generates simulated pHMM dataset
 #	code written for clarity, maybe not efficient
+#
 #	arguments:
-# N: Number of study groups (integer). e.g.: number of families etc.
-# M: Number of members in a group (integer).
-# K: Number of response variables (integer vector with M elements)
-#	ni: Number of observation per group (fixed for all groups, integer)
-# hs: Number of hidden states (integer vector with (M+1) elements)
-#	tau: a list of means for each hidden state for responses (length of list is M, matrix of hs[m+1] by K_m)
-#	residinvvar: inverse of the residual variance (numeric, sum_{m}K_m elements)
-#	reSigma: random effects covariance matrix (\sum K_m x \sum K_m matrix)
-#	P0: hidden states transition probability matrix (hs[1] x hs[1] matrix) for placebo or baseline group
-#	Pi0: initial probability vector (vector, length hs[1]) for placebo or baseline group
-#	Pm : hidden states translation probability matrix (list of length M, each element is a hs[1] x hs[m+1] matrix)
-# w: random effects design matrix -- uses default as in paper (separate but correlated REs), \sum K_m by \sum K_m matrix, diagnomal matrix by default
-#	rx: binary vector of treatment indicators of length N; if not specified assumes all come from baseline group
+#       N: integer, Number of study groups. e.g.: number of families etc.
+# 	M: integer, Number of members in a group, e.g: number of family members is 2.
+# 	K: integer vector with M elements, each element is the number of responses from each member.
+#	ni: integer, fixed for all groups. Number of observation per group
+# 	hs: integer vector with (M+1) elements. Number of hidden states (group-level hidden states, member-level hidden states)
+#	tau: a list of M elements, each is a hs[m+1] by K_m matrix. means for each hidden state for responses
+#	residinvvar: a list of M elements, each is a each is a hs[m+1] by K_m matrix, inverse of the variance for each hidden state of responses
+#	reSigma: \sum K_m x \sum K_m matrix. random effects covariance matrix.
+#	P0: hs[1] x hs[1] matrix. hidden states transition probability matrix for placebo or baseline group
+#	Pi0: hs[1]-dimensional vector, initial probability vector for placebo or baseline group
+#	Pm : a list of M elements, each of which is a hs[1] x hs[m+1] matrix. Perception matrices.
+# 	w: \sum K_m by \sum K_m matrix, diagnomal matrix by default, random effects design matrix -- uses default as in paper (separate but correlated REs).
+#	rx.: N-d binary vector, treatment indicators of length N; if not specified assumes all come from baseline group
 #	P1: hidden state tpm for treatment group (same as P0, requires rx to be specified); if left null, assumes no difference
 #	Pi1: hidden state initial probability vector for treatment group (same as Pi0, requires rx to be specified); if left null, assumes no difference
 #	fitRx: a logical vector of length two: fitRx[1] is whether to fit intitial probably treatment probabilities separately for Rx and Control; fitRx[2] fits separate tpms
@@ -27,7 +28,7 @@
 #	N: Number of groups, as specified
 #	ni: number of observation times per group
 #	Z: generated hidden states (N x ni matrix) -- you don't have these normally
-# Zm : generated hidden states of each member, a list of M and each element is an N x ni matrix
+# 	Zm : generated hidden states of each member, a list of M and each element is an N x ni matrix
 #	randomEffects: subject specific random effects (N x \sum K_m matrix -- you don't have these normally either)
 #	rx: treatment dummy variables
 #	pars: parameter vector used to simulate data (useful for thinking specifying possible starting values)
