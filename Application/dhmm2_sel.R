@@ -56,9 +56,9 @@ inits_hs5 = c(0.761,0.0895,0.0895,0.03,
               0.382,0.382,0.024,0.025,0.049,0.341,0.134,0.135,0.049,0.341,0.134,0.135,0.013,0.011,0.010,0.483,0.013,0.011,0.010,0.483,
               0.163,0.005,0.005,0.005,0.005,0.316,0.487,0.487,0.051,0.051,0.316,0.486,0.486,0.050,0.050,0.102,0.011,0.011,0.447,0.447,
               0.600,0.031,0.031,0.013,0.013,0.191,0.459,0.459,0.032,0.032,0.190,0.459,0.459,0.031,0.031,0.009,0.025,0.025,0.462,0.462)
-hs0=5
+hs0=3
 message("DHMM2: The number of hidden states is: ", hs0)
-dhmm <- simulated(y = c(y_c,y_p), X = as.matrix(X,ncol=2), inits. = inits_hs5, report1. = 1000, burnin = 30000,no.random=F,
+dhmm <- simulated(y = c(y_c,y_p), X = as.matrix(X,ncol=2), inits. = inits_hs3, report1. = 1000, burnin = 30000,no.random=F,
                   nsim. = 40000, ksamp. = 1, N. = 390, ni. = rep(5,390), Km = c(2,2), hs = c(hs0,hs0,hs0), rx. = A1C$GROUP-1,
                   fitRx = c(F,T,T), id = rep(1:390,5), hyperpar= c(5,1,1,1,1,.001, .0002), run. = 1)
 save('dhmm', 'inits_hs5',file=paste0("dhmm2_cov_hs",hs0,".Rdata"))
