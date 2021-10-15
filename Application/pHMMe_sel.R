@@ -9,7 +9,7 @@ y_p = list(t(matrix(data.na$PxDFR,nr = 5)),t(matrix(log(data.na$PxPCC),nr = 5)))
 # The covariates: age and gender
 X = read.csv("../age_sex.csv",header=T)
 # load in the functions to implement the method
-source('../../code/DHMM_v2.R')
+source('../DHMM_v2.R')
 
 # ------ Step 2: Set up initial values ------
 # 2-class model
