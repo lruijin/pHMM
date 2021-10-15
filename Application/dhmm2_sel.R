@@ -1,10 +1,18 @@
+# ------ Step 1: read in data ------
 data <- read.csv("../Fmod_imputed.csv",header = T)
 data.na <- na.omit(data)
+# GROUP in A1C.csv indicates the study arm each family belongs to
 A1C <- read.csv("../A1C.csv",header = T)
+# The four main manifesto variables
 y_c = list(t(matrix(data.na$CxDFR,nr = 5)),t(matrix(log(data.na$CxPCC),nr = 5)))
 y_p = list(t(matrix(data.na$PxDFR,nr = 5)),t(matrix(log(data.na$PxPCC),nr = 5)))
+# The covariates: age and gender
 X = read.csv("../age_sex.csv",header=T)
+# load in the functions to implement the method
 source('../../code/DHMM_v2.R')
+
+# ------ Step 2: Set up initial values ------
+# 2-class model
 inits_hs2 = c(0.851, 
               0.424,0.006,
               0.479,0.056,
@@ -17,7 +25,7 @@ inits_hs2 = c(0.851,
               0.431,0.0235,
               0.479,0.056,
               0.791,0.045)
-
+# 3-class model
 inits_hs3 = c(0.761,0.179,
               0.702,0.073,0.024,0.240,0.014,0.020,
               0.163,0.005,0.005,0.632,0.973,0.101,
@@ -30,7 +38,7 @@ inits_hs3 = c(0.761,0.179,
               0.764,0.049,0.049,0.269,0.013,0.021,
               0.163,0.005,0.005,0.632,0.973,0.101,
               0.600,0.031,0.013,0.381,0.918,0.063)
-
+# 4-class model
 inits_hs4 = c(0.761,0.0895,0.0895,
               0.351,0.351,0.073,0.024,0.368,0.240,0.024,0.368,0.240,0.014,0.010,0.010,
               0.163,0.005,0.005,0.005,0.316,0.487,0.487,0.051,0.316,0.486,0.486,0.050,
@@ -43,7 +51,7 @@ inits_hs4 = c(0.761,0.0895,0.0895,
               0.382,0.382,0.049,0.049,0.341,0.269,0.049,0.341,0.269,0.013,0.011,0.010,
               0.163,0.005,0.005,0.005,0.316,0.487,0.487,0.051,0.316,0.486,0.486,0.050,
               0.600,0.031,0.031,0.013,0.191,0.459,0.459,0.032,0.190,0.459,0.459,0.031)
-
+# 5-class model
 inits_hs5 = c(0.761,0.0895,0.0895,0.03,
               0.351,0.351,0.036,0.037,0.024,0.368,0.120,0.120,0.024,0.368,0.120,0.120,0.014,0.010,0.010,0.483,0.014,0.010,0.010,0.483,
               0.163,0.005,0.005,0.005,0.005,0.316,0.487,0.487,0.051,0.051,0.316,0.486,0.486,0.050,0.050,0.102,0.011,0.011,0.447,0.447,
@@ -56,9 +64,15 @@ inits_hs5 = c(0.761,0.0895,0.0895,0.03,
               0.382,0.382,0.024,0.025,0.049,0.341,0.134,0.135,0.049,0.341,0.134,0.135,0.013,0.011,0.010,0.483,0.013,0.011,0.010,0.483,
               0.163,0.005,0.005,0.005,0.005,0.316,0.487,0.487,0.051,0.051,0.316,0.486,0.486,0.050,0.050,0.102,0.011,0.011,0.447,0.447,
               0.600,0.031,0.031,0.013,0.013,0.191,0.459,0.459,0.032,0.032,0.190,0.459,0.459,0.031,0.031,0.009,0.025,0.025,0.462,0.462)
+# set the number of hidden states as 2, 3, 4, or 5
 hs0=3
-message("DHMM2: The number of hidden states is: ", hs0)
+message("pHMMe: The number of hidden states is: ", hs0)
+
+# ------- Step 3: obtain posterior samples from pHMMe model: ------
+# Detailed arguments to be found in "DHMM_v2.R"
+# Only change "inits." when setting different number of hidden states
+# 	e.g: hs0 = 3 corresponds to inits. = inits_hs3 in the following function
 dhmm <- simulated(y = c(y_c,y_p), X = as.matrix(X,ncol=2), inits. = inits_hs3, report1. = 1000, burnin = 30000,no.random=F,
                   nsim. = 40000, ksamp. = 1, N. = 390, ni. = rep(5,390), Km = c(2,2), hs = c(hs0,hs0,hs0), rx. = A1C$GROUP-1,
                   fitRx = c(F,T,T), id = rep(1:390,5), hyperpar= c(5,1,1,1,1,.001, .0002), run. = 1)
-save('dhmm', 'inits_hs5',file=paste0("dhmm2_cov_hs",hs0,".Rdata"))
+save('dhmm', 'inits_hs3',file=paste0("dhmm2_cov_hs",hs0,".Rdata"))
