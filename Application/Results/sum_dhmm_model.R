@@ -1,8 +1,10 @@
 rm(list=ls())
-setwd("~/Project2_DMHMM/code")
-load('../application/var_hs/ori/dhmm1/dhmm_cov_hs3.Rdata')
+setwd("pHMM/Application/Results")
+# ------------ Step 1: load in samples
+load('../dhmm_cov_hs3.Rdata')
 burnin = 30000
 hs = 3
+hs0 = c(3,3)
 library(ggplot2)
 library(ggpubr)
 data <- read.csv("C:/Users/lur5.NIH/OneDrive - National Institutes of Health/Project1_LCA/data/Fmod_imputed.csv",header = T)
