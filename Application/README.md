@@ -1,5 +1,5 @@
 ## Working flow for reproducing real data analysis results
 ### Obtain posterior samples
-The three files in this folder `phmm_sel.R`, `pHMMe_sel.R` and ``
+The three files in this folder `phmm_sel.R`, `pHMMe_sel.R` and `mhmm_pc_sel.R` are used
 ### Summarize the estimation results from the posterior samples
 ### Model diagnosis
