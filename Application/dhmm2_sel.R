@@ -69,9 +69,13 @@ hs0=3
 message("pHMMe: The number of hidden states is: ", hs0)
 
 # ------- Step 3: obtain posterior samples from pHMMe model: ------
+# The following function fitts pHMMe model by setting fitRx as (F,T,T).
+# Thus, both transition probabilities and perception matrices are arm-specific.
+
 # Detailed arguments to be found in "DHMM_v2.R"
 # Only change "inits." when setting different number of hidden states
 # 	e.g: hs0 = 3 corresponds to inits. = inits_hs3 in the following function
+
 dhmm <- simulated(y = c(y_c,y_p), X = as.matrix(X,ncol=2), inits. = inits_hs3, report1. = 1000, burnin = 30000,no.random=F,
                   nsim. = 40000, ksamp. = 1, N. = 390, ni. = rep(5,390), Km = c(2,2), hs = c(hs0,hs0,hs0), rx. = A1C$GROUP-1,
                   fitRx = c(F,T,T), id = rep(1:390,5), hyperpar= c(5,1,1,1,1,.001, .0002), run. = 1)
