@@ -4,6 +4,10 @@ library(gridExtra)
 library(grid)
 library(cowplot)
 
+# This file includes several functions for plotting
+# They are used in the files summarizing posterior samples.
+
+# This function plots the trace plot of fixed effects for the four manifesto variables
 plot_tau_m <- function(obj,hs,mar=0.5,cex=0.8,ylabs=c("CDFR","CPCC","PDFR","PPCC")){
   par(mfrow=c(2,2))
   for(i in 1:4){
@@ -18,6 +22,8 @@ plot_tau_m <- function(obj,hs,mar=0.5,cex=0.8,ylabs=c("CDFR","CPCC","PDFR","PPCC
     legend("bottomright",legend = c("Discordant","Harmonious","Indifferent"), col=1:hs, lty=1, cex = cex,border = F, bg="transparent")
   }
 }
+# This function plots the trace plots of fixed effects for the four manifesto variables
+# It is the ggplot2 version, which is used in the paper
 plot_tau_m_gg <- function(obj,hs,mar=0.5,cex=0.8,ylabs=c("CDFR","log(CPCC)","PDFR","log(PPCC)"),
                           tit=c("CDFR","CPCC","PDFR","PPCC")){
   for(i in 1:4){
@@ -33,6 +39,8 @@ plot_tau_m_gg <- function(obj,hs,mar=0.5,cex=0.8,ylabs=c("CDFR","log(CPCC)","PDF
   ggarrange(p1,p2,p3,p4,labels = tit,common.legend = T, vjust = -0.5, legend = "bottom")+
     theme(plot.margin = margin(t=0.8,r = 0, b = 0.2, l =0, unit = "cm"))
 }
+# This function plots the trace plots of the fixed effects of the four manifesto variables
+# by marginalizing the family members.
 plot_tau_g <- function(obj,hs,M,Km=c(2,2),mar=0.5,cex = 0.8,ylabs=c("CDFR","CPCC","PDFR","PPCC")){
   tau_f <- matrix(NA,nrow(obj$betaa),length(obj$pidx$tau))
   ctt_pm = 0
@@ -60,7 +68,9 @@ plot_tau_g <- function(obj,hs,M,Km=c(2,2),mar=0.5,cex = 0.8,ylabs=c("CDFR","CPCC
     legend("bottomright",legend = c("Discordant","Harmonious","Indifferent"), col=1:hs, lty=1, border = F,cex=cex, bg="transparent")
   }
 }
-
+# This function plots the trace plots of the fixed effects of the four manifesto variables
+# by marginalizing the family members.
+# This is the ggplot version
 plot_tau_g_gg <- function(obj,hs,M,Km=c(2,2),mar=0.5,cex = 0.8,
                           ylabs=c("CDFR","log(CPCC)","PDFR","log(PPCC)"),
                           tit=c("CDFR","CPCC","PDFR","PPCC")){
