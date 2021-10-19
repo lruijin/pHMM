@@ -6,7 +6,7 @@ This repository contains the codes for reproducing results in "A Perception-augm
   - `DHMM_v1.R` and `MHMM_v3.R` are used for simulation study. 
   - `DHMM_v2.R` and `MHMM_v4.R` are used for real data application. They accommodate covariates in the emission model.  
 
-The working flows for generating real data analysis results (as in Sections 2 and 5) and simulation results (as in Section 6) are described in separate `README` files in folders `Application` and 'Simulation', respectively. 
+The working flows for generating real data analysis results (as in Sections 2 and 5) and simulation results (as in Section 6) are described in separate `README` files in folders `Application` and `Simulation`, respectively. 
 ## Reference:
 1. Lu, R., Nansel, T. R. and Chen, Z. (2021). "A perceptiion-augmented hidden Markov model for family management of diabetes". Under review.
 2. Raffa, J. D. and Dubin, J. A. (2015). "Multivariate longitudinal data analysis with mixed effects hidden Markov models." Biometrics, 71, 3, 821-831.
