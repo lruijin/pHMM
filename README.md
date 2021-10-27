@@ -8,5 +8,5 @@ This repository contains the codes for reproducing results in "A Perception-augm
 
 The working flows for generating real data analysis results (as in Sections 2 and 5) and simulation results (as in Section 6) are described in separate `README` files in folders `Application` and `Simulation`, respectively. 
 ## Reference:
-1. Lu, R., Nansel, T. R. and Chen, Z. (2021). "A perceptiion-augmented hidden Markov model for family management of diabetes". Under review.
+1. Lu, R., Nansel, T. R. and Chen, Z. (2021). "A perception-augmented hidden Markov model for family management of diabetes". Under review.
 2. Raffa, J. D. and Dubin, J. A. (2015). "Multivariate longitudinal data analysis with mixed effects hidden Markov models." Biometrics, 71, 3, 821-831.
